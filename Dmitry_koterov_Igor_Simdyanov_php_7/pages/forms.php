@@ -137,12 +137,12 @@ echo '<h2>Передача данных командной строки</h2>';
     </p>
     <form>
         <?php
-        if(isset($_REQUEST['sub'])){
-            foreach($_REQUEST['known'] as $mass => $v){
-                if($v) {echo "Вы знаете $mass" . '<br />';}
-                else echo "Вы не знаете $mass" . '<br />';
+            if(isset($_REQUEST['sub'])){
+                foreach($_REQUEST['known'] as $mass => $v){
+                    if($v) {echo "Вы знаете $mass" . '<br />';}
+                    else echo "Вы не знаете $mass" . '<br />';
+                }
             }
-        }
         ?>
         <input type="hidden" name="known[PHP]" value="0">
         <input type="checkbox" name="known[PHP]" value="1">PHP
