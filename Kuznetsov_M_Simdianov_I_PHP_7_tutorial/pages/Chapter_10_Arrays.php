@@ -111,7 +111,7 @@
             echo "a=$a b=$b <br />";
         ?>
 
-    <h3>5.Создайте массив со случайным количеством элементов от 5 до 10, элементы
+    <h3>5. Создайте массив со случайным количеством элементов от 5 до 10, элементы
         которого принимают значени от 0 до 100. Отсортируйте элементы в порядке от наименьшего к наибольшему.</h3>
 
     <pre>
@@ -138,17 +138,49 @@
             $mass[] = rand(5, 10);
         }
         print_r($mass);
+        // Вариант через велосипед под название сортировка пузырьком
+//        for($i = 0; $i < count($mass); $i++){
+//            for($j = 0; $j < count($mass); $j++){
+//                if($mass[$i] < $mass[$j]){
+//                    $dop = $mass[$j];
+//                    $mass[$j] = $mass[$i];
+//                    $mass[$i] = $dop;
+//                }
+//            }
+//        }
+    // Вариант через велосипед под название сортировка пузырьком, без использования доп. переменной
         for($i = 0; $i < count($mass); $i++){
             for($j = 0; $j < count($mass); $j++){
                 if($mass[$i] < $mass[$j]){
-                    $dop = $mass[$j];
-                    $mass[$j] = $mass[$i];
-                    $mass[$i] = $dop;
+                   $mass[$i] = $mass[$i] + $mass[$j];
+                   $mass[$j] = $mass[$i] - $mass[$j];
+                   $mass[$i] = $mass[$i] - $mass[$j];
                 }
             }
         }
         echo '<br />';
         print_r($mass);
+
+    ?>
+
+    <h3>6. Создайте текстовый файл с названием месяцев. В документации php
+        найдите функцию file(). Создайте массив с названием месяцев из содержимого текстового файла.</h3>
+    <pre>
+        unset($mass);
+        $mass = file('../files/month.txt');
+
+        $str = implode($mass);
+        echo '$str = ' . $str . '&ltbr /&gt';
+        $month = explode(',', $str, 12);
+        print_r($month);
+    </pre>
+    <?php
+    unset($mass);
+        $mass = file('../files/month.txt');
+        $str = implode($mass);
+        echo '$str = ' . $str . '<br />';
+        $month = explode(',', $str, 12);
+        print_r($month);
     ?>
 </body>
 </html>
