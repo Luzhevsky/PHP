@@ -18,3 +18,9 @@ function animal($animal){
         default: echo "Животное не найдено";
     }
 }
+function globalParameter(){
+    foreach ($_SERVER as $k => $v) {
+        echo "$k => <tt>$v</tt><br />";
+    }
+
+}
