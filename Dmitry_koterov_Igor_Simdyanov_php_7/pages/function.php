@@ -173,6 +173,48 @@
             благодоря этому можно сделать переменное число параметров(Устаревший способ)
             используя функцию func_get_arg($i).
         </p>
+
+        <pre>
+            function parametersMuchOne(){
+                $sum = 0;
+                for ($i = 0; $i < func_num_args(); $i++){
+                    $sum += func_get_arg($i);
+                }
+                return $sum;
+            }
+        </pre>
+        <p>Через цикл for используя функции func_num_args() и  func_get_arg()</p>
+        <?php
+            function parametersMuchOne(){
+                $sum = 0;
+                for ($i = 0; $i < func_num_args(); $i++){
+                    $sum += func_get_arg($i);
+                }
+                return $sum;
+            }
+            echo parametersMuchOne(1,2,3,4,5,6);
+        ?>
+        <p>Через цикл foreach используя функцию  func_get_args()</p>
+        <pre>
+            function parametersMuchTwo(){
+                $sum = 0;
+                foreach (func_get_args() as $mass){
+                    $sum += $mass;
+                }
+                return $sum;
+            }
+            echo parametersMuch(15,123,32,123,123);
+        </pre>
+        <?php
+            function parametersMuch(){
+                $sum = 0;
+                foreach (func_get_args() as $mass){
+                    $sum += $mass;
+                }
+                return $sum;
+            }
+            echo parametersMuch(15,123,32,123,123);
+        ?>
 </body>
 </html>
 
