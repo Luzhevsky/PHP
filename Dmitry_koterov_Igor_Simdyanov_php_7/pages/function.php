@@ -713,6 +713,172 @@
         <p>
             Анонимные функции допускается передавать в качестве параметров другим функциям.
         </p>
+        <pre>
+            function tabber5($spaces, $echo, ...$planets){
+                $new = [];
+                foreach ($planets as $planet){
+                    $new[] = str_repeat("&ampnbsp;", $spaces).$planet;
+                }
+                $echo(...$new); //Говорит о том, что будет использована анонимная функция.
+            }
+
+
+            tabber5(10,function(...$str){
+                foreach ($str as $v){
+                    echo "$v&lt/br&gt\n";
+                }
+            }, "Венера","Земля", "Марс");
+        </pre>
+        <?php
+        if(function_exists("tabber1")){
+            echo "Ошибка функция существует<br />";
+        }
+        if(function_exists("t")){
+            echo "Ошибка функция существует<br />";
+        }
+
+            function tabber5($spaces, $echo, ...$planets){
+                $new = [];
+                foreach ($planets as $planet){
+                    $new[] = str_repeat("&nbsp;", $spaces).$planet;
+                }
+                $echo(...$new); //Говорит о том, что будет использована анонимная функция.
+            }
+
+
+            tabber5(10,function(...$str){
+                foreach ($str as $v){
+                    echo "$v</br>\n";
+                }
+            }, "Венера","Земля", "Марс");
+        ?>
+
+    <h2>Замыкания</h2>
+        <p>
+            Замыкание - это функция, которая запоминает состояние окружения в момент своего создания, даже
+            если состояние позже изменится.<b>Замыкание пременино только к анонимным функциям в PHP.</b> Для
+            активации необходимо использовать ключевое поле use. После него можно указать в скобках переменные
+            которые должны войти в замыкание.
+        </p>
+
+        <pre>
+            $check = function(array $errors) use ($message) {
+                if (isset($errors) && count($errors) > 0) {
+                    echo $message;
+                }
+            };
+
+            $mass[] = "Имя пользователя";
+            $check($mass);
+            $message = "Ошибка2"; //сообщение нельзя изменить.
+            $check($mass);
+        </pre>
+        <?php
+            $message = "Ошибка работа не может быть продолжена.";
+            $check = function(array $errors) use ($message) {
+                if (isset($errors) && count($errors) > 0) {
+                    echo $message;
+                }
+            };
+            $mass[] = "Имя пользователя";
+            $check($mass);
+            $message = "Ошибка2";
+            $check($mass);
+        ?>
+    <h2>Возврат функцией ссылки</h2>
+        <p>
+            Лучше не использовать! Но если нужно, ставит знак & в двух местах перед определение имения функции, а
+            также в правой чати оператора присваивания при вызове функции. СТР 232.
+        </p>
+        <pre>
+            $a =  100;
+            function &r(){
+                global $a;
+                return $a;
+            }
+            $b = &r();
+            echo "b=",$b;
+            $b = 0;
+            echo "a=",$a;
+        </pre>
+        <?php
+            $a =  100;
+            function &r(){
+                global $a;
+                return $a;
+            }
+            $b = &r();
+            echo "b=",$b . '<br />';
+            $b = 0;
+            echo "a=",$a;
+        ?>
+    <h2>Технология отложенного копирования.</h2>
+        <p>
+            Передача параметров функцию по ссылке работает с меньшей скоростью, чем передача параметров по значению.
+            Связано это с тем, что используется технология отложенного копирования. Когда в программе выполняются операторы
+            присваивания(тоже самое что передача в функцию по значению), PHP не копируют данные. Он просто помечает переменную-приёмник
+            как копию источника. Реальное копирование происходит при изменения переменных.
+        </p>
+        <pre>
+             function takeVal($a){
+                $x = $a[1234];
+            }
+            function takeRef(&$a){
+                $x = $a[1234]++;
+            }
+            function takeValAndModif($a){
+                $x = $a[1234]++;
+            }
+            function takeRefAndModif(&$a){
+                $x = $a[1234]++;
+            }
+            test123("takeVal");
+            test123("takeRef");
+            test123("takeValAndModif");
+            test123("takeRefAndModif");
+
+            function test123($func){
+                $a = [];
+                for ($i = 1; $i <= 100000; $i++){
+                    $a[$i] = $i;
+                }
+                for($t = time(); $t == time(); );
+                for ($N = 0, $t = time(); time() == $t; $N++){
+                    $func($a);
+                }
+                printf("&ltpre&gt $func&lt/pre&gt took %d itr/sec", $N);
+            }
+        </pre>
+        <?php
+            function takeVal($a){
+                $x = $a[1234];
+            }
+            function takeRef(&$a){
+                $x = $a[1234]++;
+            }
+            function takeValAndModif($a){
+                $x = $a[1234]++;
+            }
+            function takeRefAndModif(&$a){
+                $x = $a[1234]++;
+            }
+            test123("takeVal");
+            test123("takeRef");
+            test123("takeValAndModif");
+            test123("takeRefAndModif");
+
+            function test123($func){
+                $a = [];
+                for ($i = 1; $i <= 100000; $i++){
+                    $a[$i] = $i;
+                }
+                for($t = time(); $t == time(); );
+                for ($N = 0, $t = time(); time() == $t; $N++){
+                    $func($a);
+                }
+                printf("<pre>$func</pre> took %d itr/sec<br />", $N);
+            }
+        ?>
 </body>
 </html>
 
