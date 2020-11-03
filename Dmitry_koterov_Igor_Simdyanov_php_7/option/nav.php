@@ -14,5 +14,6 @@
             echo "<li class='li_nav'><a href='../pages/associative array.php'>Ассоциативные массивы</a></li>";
             echo "<li class='li_nav'><a href='../pages/function.php'>Функции</a></li>";
             echo "<li class='li_nav'><a href='../pages/generators.php'>Генераторы</a></li>";
+            echo "<li class='li_nav'><a href='../pages/string_functions.php'>Строковые функции</a></li>";
         echo '</ul>';
     echo '</nav>';
