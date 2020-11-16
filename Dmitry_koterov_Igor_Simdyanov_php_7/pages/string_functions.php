@@ -650,8 +650,246 @@
             Передача в качестве аргуметнов списков. Примеры выше. Каждый элемент из from Заменяется на каждый из to
             если массив. Таким образом можно за раз заменить несколько пар слов.
         </p>
+        <p>
+            Пример использования для заполнения html страницы.
+        </p>
+        <pre>
+            $from = ["{TITLE}", "{BODY}"];
+            $to = ["Название страницы", "&ltp&gtЧто то в боди есть.&lt/p&gt"];
+            $text = <<< Market
+            <&lt!DODCTYPE html&gt
+            &lthtml lang="ru"&gt
+            <&lthead&gt
+                <&lttitle&gt{TITLE}<&lt/title&gt
+            &lt/head&gt
+                &ltbody&gt
+                    {BODY}
+                &lt/body&gt
+            &lt/html&gt
+            Market;
+            echo str_replace($from, $to, $text);
+        </pre>
+        <p>
+            <i style="font-size: 20px;">string strtr(string $str, string $from, string $to)</i> Функция заменяет сиволы встречающиеся в
+            $from на символы $to из строки $str.
+        </p>
+        <p>
+            <i style="font-size: 20px;">string strtr(string $str, array $substitutes)</i> Вторая разновидность функции
+            с двумя параметрами. Беред строку $str и ищет там ключи из $stubstitues и заменяет из на значения элемента
+            массива.
+        </p>
+        <pre>
+            $m2 = ["1" => "один", "2" => "Два"];
+            $str2 = "Тут 1, 2 рубля";
+            echo strtr($str2, $m2);
+        </pre>
+        <?php
+            $m2 = ["1" => "один", "2" => "Два"];
+            $str2 = "Тут 1, 2 рубля";
+            echo strtr($str2, $m2);
+        ?>
+        <p>
+            Можно использовать функция strtr() для транслитерации строк. Пример ниже можно выкинуть в мусорку
+            так как не работает  с  русским UTF-8. Нужно использовать str_replace КОторый совместим с UTF-8/
+        </p>
+        <pre>
+            function transliterate2($st) {
+                $st = strtr($st, "абвгдежзиклмнопрстуфыэФБВГДЕЖЗИЙКЛМНОПРСТУФЫЭ",
+                                 "abvgdegziyklmnoprstufyeABVGDEGZIYKLMNOPRSTUFYE");
 
+                $st = strtr($st, [
+                   'e'=>"yo",     'x'=>"h",   'ц'=>"ts", 'ч'=>"ch",  'ш'=>"sh",
+                   'щ'=>"shch",   'ъ'=>'',    'ь'=>'',   'ю'=>"yu",  'я'=>"ya",
+                   'Е'=>"Yo",     'Х'=>"H",   'Ц'=>"Ts", 'Ч'=>"Ch",  'Ш'=>"Sh",
+                   'Щ'=>"Shch",   'Ъ'=>'',    'Ь'=>'',   'Ю'=>"Yu",  'Я'=>"Ya",
+                ]);
+                return $st;
+            }
+            echo transliterate("У попа была собака он ее любил.");
+        </pre>
+        <?php
+            function transliterate2($st) {
+                $st = strtr($st, "абвгдежзиклмнопрстуфыэФБВГДЕЖЗИЙКЛМНОПРСТУФЫЭ",
+                                 "abvgdegziyklmnoprstufyeABVGDEGZIYKLMNOPRSTUFYE");
+
+                $st = strtr($st, [
+                   'e'=>"yo",     'x'=>"h",   'ц'=>"ts", 'ч'=>"ch",  'ш'=>"sh",
+                   'щ'=>"shch",   'ъ'=>'',    'ь'=>'',   'ю'=>"yu",  'я'=>"ya",
+                   'Е'=>"Yo",     'Х'=>"H",   'Ц'=>"Ts", 'Ч'=>"Ch",  'Ш'=>"Sh",
+                   'Щ'=>"Shch",   'Ъ'=>'',    'Ь'=>'',   'Ю'=>"Yu",  'Я'=>"Ya",
+                ]);
+                return $st;
+            }
+            echo transliterate2("У попа была собака он ее любил.");
+        ?>
+        <p>Рабочий пример:</p>
+        <pre>
+            function transliterate($st) {
+                        $pattern =[
+                            'а',  'б',  'в',  'г',  'д',  'е',  'е',
+                            'ж',  'з',  'и',  'й',  'к',  'л',  'м',
+                            'н',  'о',  'п',  'р',  'с',  'т',  'у',
+                            'ф',  'Х',  'ч',  'ц',  'ш',  'щ',  'ъ',
+                            'ы',  'ь',  'э',  'ю',  'я',
+
+                            'А',  'Б',  'В',  'Г',  'Д',  'Е',  'Е',
+                            'Ж',  'З',  'И',  'Й',  'К',  'Л',  'М',
+                            'Н',  'О',  'П',  'Р',  'С',  'Т',  'У',
+                            'Ф',  'Х',  'Ч',  'Ц',  'Ш',  'Щ',  'Ъ',
+                            'Ц',  'Ь',  'Э',  'Ю',  'Я',
+                        ];
+                        $replace = [
+                            'a',  'b',  'v',  'g',  'd',  'e',  'yo',
+                            'zh',  'z',  'i',  'y',  'k',  'l',  'm',
+                            'n',  'o',  'p',  'r',  's',  't',  'u',
+                            'f',  'h',  'ch',  'ts',  'sh',  'shch',  '\'',
+                            'y',  '',  'e',  'yu',  'ya',
+
+                            'A',  'B',  'V',  'G',  'D',  'E',  'Yo',
+                            'Zh',  'Z',  'I',  'Y',  'K',  'L',  'M',
+                            'N',  'O',  'P',  'R',  'S',  'T',  'U',
+                            'F',  'H',  'Ch',  'Ts',  'Sh',  'Shch',  '\'',
+                            'Y',  '',  'E',  'Yu',  'Ya',
+                        ];
+                        $replace2 = [ //вроде стандарт
+                            'a',  'b',  'v',  'g',  'd',  'e',  'yo',
+                            'zh',  'z',  'i',  'j',  'k',  'l',  'm',
+                            'n',  'o',  'p',  'r',  's',  't',  'u',
+                            'f',  'x',  'ch',  'c',  'sh',  'shh',  '``',
+                            'y`',  '`',  'e`',  'yu',  'ya',
+
+                            'A',  'B',  'V',  'G',  'D',  'E',  'Yo',
+                            'ZH',  'Z',  'I',  'J',  'K',  'L',  'M',
+                            'N',  'O',  'P',  'R',  'S',  'T',  'U',
+                            'F',  'X',  'CH',  'C',  'SH',  'SHH',  '``',
+                            'y`',  '`',  'E`',  'Yu',  'Ya',
+                        ];
+                        return str_replace($pattern, $replace2, $st);
+                    }
+                    echo transliterate("Лужевский");
+        </pre>
+        <?php
+            function transliterate($st) {
+                $pattern =[
+                    'а',  'б',  'в',  'г',  'д',  'е',  'е',
+                    'ж',  'з',  'и',  'й',  'к',  'л',  'м',
+                    'н',  'о',  'п',  'р',  'с',  'т',  'у',
+                    'ф',  'Х',  'ч',  'ц',  'ш',  'щ',  'ъ',
+                    'ы',  'ь',  'э',  'ю',  'я',
+
+                    'А',  'Б',  'В',  'Г',  'Д',  'Е',  'Е',
+                    'Ж',  'З',  'И',  'Й',  'К',  'Л',  'М',
+                    'Н',  'О',  'П',  'Р',  'С',  'Т',  'У',
+                    'Ф',  'Х',  'Ч',  'Ц',  'Ш',  'Щ',  'Ъ',
+                    'Ц',  'Ь',  'Э',  'Ю',  'Я',
+                ];
+                $replace = [
+                    'a',  'b',  'v',  'g',  'd',  'e',  'yo',
+                    'zh',  'z',  'i',  'y',  'k',  'l',  'm',
+                    'n',  'o',  'p',  'r',  's',  't',  'u',
+                    'f',  'h',  'ch',  'ts',  'sh',  'shch',  '\'',
+                    'y',  '',  'e',  'yu',  'ya',
+
+                    'A',  'B',  'V',  'G',  'D',  'E',  'Yo',
+                    'Zh',  'Z',  'I',  'Y',  'K',  'L',  'M',
+                    'N',  'O',  'P',  'R',  'S',  'T',  'U',
+                    'F',  'H',  'Ch',  'Ts',  'Sh',  'Shch',  '\'',
+                    'Y',  '',  'E',  'Yu',  'Ya',
+                ];
+                $replace2 = [ //вроде стандарт
+                    'a',  'b',  'v',  'g',  'd',  'e',  'yo',
+                    'zh',  'z',  'i',  'j',  'k',  'l',  'm',
+                    'n',  'o',  'p',  'r',  's',  't',  'u',
+                    'f',  'x',  'ch',  'c',  'sh',  'shh',  '``',
+                    'y`',  '`',  'e`',  'yu',  'ya',
+
+                    'A',  'B',  'V',  'G',  'D',  'E',  'Yo',
+                    'ZH',  'Z',  'I',  'J',  'K',  'L',  'M',
+                    'N',  'O',  'P',  'R',  'S',  'T',  'U',
+                    'F',  'X',  'CH',  'C',  'SH',  'SHH',  '``',
+                    'y`',  '`',  'E`',  'Yu',  'Ya',
+                ];
+                return str_replace($pattern, $replace2, $st);
+            }
+            echo transliterate("Лужевский");
+        ?>
+        <p>
+            Кроме поддержки русской UTF-8, есть различия применения str_replace() и strtr().
+            strtr() начинает поиск с самой длинной подстроки и не проходи по одному и тому же ключу дважды.
+            А функция str_replace после замены если встретится ключ совподающий со значением произойдет замена.
+            Функция str_replcae работает быстрее если ключ массива замен сильно различаются по длинне между собой.
+            Небольшой пример:
+        </p>
+        <pre>
+               $text = "matrix has you";
+            $repl = ["matrix"=>"you", "you"=>"matrix"];
+            echo "str_replace ". str_replace(array_keys($repl), array_values($repl), $text) . '&ltbr /&gt';
+            echo " strtr(): ". strtr($text, $repl);
+        </pre>
+        <?php
+            $text = "matrix has you";
+            $repl = ["matrix"=>"you", "you"=>"matrix"];
+            echo "str_replace ". str_replace(array_keys($repl), array_values($repl), $text) . '<br />';
+            echo " strtr(): ". strtr($text, $repl);
+        ?>
+        <p>
+            Так как ключ и значение пересикаются замена при использовании str_replace происходит не так как нужно.
+        </p>
+        <p>
+            <b style="color:red;">Таким образом если мы уверены что значения не будут пересекать с рузультатом предыдущих замен
+            юзаем str_replace() в остальных случаях strtr(). С UTF-8 русским ТОЛЬКО str_replace().</b>
+        </p>
+        <p>Задание. Дана строка 'ab--cd--ef'. С помощью функции strstr выведите на экран строку '--cd--ef'.</p>
+        <pre>
+            $st = 'ab--cd--ef';
+            echo strtr($st, 'ab', '  ');
+        </pre>
+        <?php
+            $st = 'ab--cd--ef';
+            echo strtr($st, 'ab', '  ');
+        ?>
+    <h2>Преобразования символов</h2>
+        <p>
+            <i style="font-size: 20px;">string urlencode(string $st)</i> Функция URL-кодирует строку $st и возвращает результат. Применяется
+            если хотим сформировать ссылку &lta href=...&gt на как-то сценарий, но не уверены, что его
+            параметры содержат только алфавито цифровые символы. Корректирует знаки =,& и пробелы.
+        </p>
+        <pre>
+            $st ="uzum=kz forum";
+            echo "Исходная строка  $st &ltbr /&gt";
+            echo "После кодирования " . urlencode($st);
+        </pre>
+        <?php
+            $st ="uzum=kz forum";
+            echo "Исходная строка  $st <br />";
+            echo "После кодирования " . urlencode($st);
+        ?>
+
+        <p>
+            <i style="font-size: 20px;">string urlendecode(string $st)</i> Функция обратная urlencode Декодирует данные. Применяется
+            редко Php делает это самостоятельно.
+        </p>
+        <p>
+            <i style="font-size: 20px;">string rawurlencode(string $st)</i> Функция эквивалента urlencode(), но только пробелы не
+            преобразуются в +, а воспринимаютчя как обычные неалфавитно-цифровые символы.
+        </p>
+        <p>
+            <i style="font-size: 20px;">string rawurldecode(string $st)</i> Функция обратаная rawurlencode.
+        </p>
+        <p>
+            <pre><i style="font-size: 20px;">string htmlspecialchars (
+                string $st [,
+                int $flags = ENT_COMPAT | ENT_HTML401 [,
+                string $encoding = ini_get("default_charset") [,
+                bool $double_encode = true]]]
+            )</pre> Важная функция</i> Основное назначение гарантировать, что в выводимой строке ни один участок не будет
+            восприниматся как тег. Заменяет в строке $st некоторые символы, такие как амперсанд &, кавычки и знаки < b >,
+            их HTML-эквивалентами, соответсвенно, &ampamp;,&ampquot;, &amp#039; &amplt, &ampgt;. Типичное применение в формах
+            чтобы не было проблем с кавычками. И использования для того чтобы пользователь не мог вставит выполняемый код в страницу
+            например javascript.
+        </p>
 </body>
+
 </html>
 
 
